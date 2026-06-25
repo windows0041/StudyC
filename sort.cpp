@@ -13,9 +13,11 @@ void QuickSortTool(vector<int>& arr, int left, int right);
 void QuickSort(vector<int>& arr);
 void BubbleSort(vector<int>& arr);
 void ShellSort(vector<int>& arr);
+void SelectSort(vector<int>& arr);
 void MergeSort(vector<int>& arr);
 void BucketSort(vector<int>& arr);
 void CountingSort(vector<int>& arr);
+void HeapSort(vector<int>& arr);
 
 void ArrPrint(vector<int>& arr) {
     for (int i = 0; i < arr.size(); i++) {
@@ -89,6 +91,21 @@ void ShellSort(vector<int>& arr) {
             }
             arr[j] = temp;
         }
+    }
+}
+
+// Select Sort
+void SelectSort(vector<int>& arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        int min = arr[i], index = i, j = i;
+        while (j < arr.size()) {
+            if (arr[j] > min) {
+                min = arr[j];
+                index = j;
+            }
+            j++;
+        }
+        swap(arr[i], arr[index]);
     }
 }
 
@@ -190,6 +207,39 @@ void CountingSort(vector<int>& arr) {
     }
 }
 
+// Heap Sort
+void Heapify(vector<int>& arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        Heapify(arr, n, largest);
+    }
+}
+
+void HeapSort(vector<int>& arr) {
+    int n = arr.size();
+
+    // 建大顶堆
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        Heapify(arr, n, i);
+    }
+
+    // 逐个提取最大值放到末尾
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        Heapify(arr, i, 0);
+    }
+}
+
 void TestSortingAlgorithm(vector<int>& arr, void (*SortAlgorithm)(vector<int>&), const string& algorithmName) {
     cout << "========== " << algorithmName << " ==========" << endl;
     cout << "Source Array: ";
@@ -233,15 +283,19 @@ int main() {
     vector<int> arr5 = baseArr;
     vector<int> arr6 = baseArr;
     vector<int> arr7 = baseArr;
+    vector<int> arr8 = baseArr;
+    vector<int> arr9 = baseArr;
 
     // 使用统一的测试函数测试各排序算法
     TestSortingAlgorithm(arr1, BubbleSort, "BubbleSort");
     TestSortingAlgorithm(arr2, QuickSort, "QuickSort");
     TestSortingAlgorithm(arr3, InsertionSort, "InsertionSort");
     TestSortingAlgorithm(arr4, ShellSort, "ShellSort");
-    TestSortingAlgorithm(arr5, MergeSort, "MergeSort");
-    TestSortingAlgorithm(arr6, BucketSort, "BucketSort");
-    TestSortingAlgorithm(arr7, CountingSort, "CountingSort");
+    TestSortingAlgorithm(arr5, SelectSort, "SelectSort");
+    TestSortingAlgorithm(arr6, MergeSort, "MergeSort");
+    TestSortingAlgorithm(arr7, BucketSort, "BucketSort");
+    TestSortingAlgorithm(arr8, CountingSort, "CountingSort");
+    TestSortingAlgorithm(arr9, HeapSort, "HeapSort");
 
     return 0;
 }

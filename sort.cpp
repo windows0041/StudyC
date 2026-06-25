@@ -17,6 +17,7 @@ void SelectSort(vector<int>& arr);
 void MergeSort(vector<int>& arr);
 void BucketSort(vector<int>& arr);
 void CountingSort(vector<int>& arr);
+void RadixSort(vector<int>& arr);
 void HeapSort(vector<int>& arr);
 
 void ArrPrint(vector<int>& arr) {
@@ -207,6 +208,36 @@ void CountingSort(vector<int>& arr) {
     }
 }
 
+// Radix Sort
+void RadixSort(vector<int>& arr) {
+    if (arr.empty()) return;
+
+    int maxVal = *max_element(arr.begin(), arr.end());
+    vector<int> output(arr.size());
+    int exp = 1;
+
+    while (maxVal / exp > 0) {
+        vector<int> count(10, 0);
+
+        for (int x : arr) {
+            count[(x / exp) % 10]++;
+        }
+
+        for (int i = 1; i < 10; i++) {
+            count[i] += count[i - 1];
+        }
+
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            int digit = (arr[i] / exp) % 10;
+            output[count[digit] - 1] = arr[i];
+            count[digit]--;
+        }
+
+        arr.swap(output);
+        exp *= 10;
+    }
+}
+
 // Heap Sort
 void Heapify(vector<int>& arr, int n, int i) {
     int largest = i;
@@ -285,6 +316,7 @@ int main() {
     vector<int> arr7 = baseArr;
     vector<int> arr8 = baseArr;
     vector<int> arr9 = baseArr;
+    vector<int> arr10 = baseArr;
 
     // 使用统一的测试函数测试各排序算法
     TestSortingAlgorithm(arr1, BubbleSort, "BubbleSort");
@@ -296,6 +328,7 @@ int main() {
     TestSortingAlgorithm(arr7, BucketSort, "BucketSort");
     TestSortingAlgorithm(arr8, CountingSort, "CountingSort");
     TestSortingAlgorithm(arr9, HeapSort, "HeapSort");
+    TestSortingAlgorithm(arr10, RadixSort, "RadixSort");
 
     return 0;
 }
